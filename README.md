@@ -11,11 +11,37 @@ npm install react-native-screen-idle-timer
 ## Usage
 
 ```js
-import { multiply } from 'react-native-screen-idle-timer';
+import ScreenIdleTimer from 'react-native-screen-idle-timer';
 
-// ...
+// Method 1
+class MyComponent extends Component {
+  render() {
+    if (this.props.screenShouldBeAwake) {
+      return (
+        <View>
+          <Text>Screen will be kept awake</Text>
+          <ScreenIdleTimer />
+        </View>
+      )
+    } else {
+      return (
+        <View>
+          <Text>Screen can sleep</Text>
+        </View>
+      );
+    }
+  }
+}
 
-const result = await multiply(3, 7);
+// Method 2
+function changeKeepAwake(shouldBeAwake) {
+  if (shouldBeAwake) {
+    ScreenIdleTimer.activate();
+  } else {
+    ScreenIdleTimer.deactivate();
+  }
+}
+
 ```
 
 ## Contributing
