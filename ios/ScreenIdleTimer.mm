@@ -1,18 +1,21 @@
 #import "ScreenIdleTimer.h"
+#import "UIKit/UIKit.h"
 
 @implementation ScreenIdleTimer
 RCT_EXPORT_MODULE()
 
-// Example method
-// See // https://reactnative.dev/docs/native-modules-ios
-RCT_REMAP_METHOD(multiply,
-                 multiplyWithA:(double)a withB:(double)b
-                 withResolver:(RCTPromiseResolveBlock)resolve
-                 withRejecter:(RCTPromiseRejectBlock)reject)
+RCT_REMAP_METHOD(activate)
 {
-    NSNumber *result = @(a * b);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+    });
+}
 
-    resolve(result);
+RCT_REMAP_METHOD(deactivate)
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
+    });
 }
 
 // Don't compile this code when we build for the old architecture.

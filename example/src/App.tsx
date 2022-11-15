@@ -1,18 +1,24 @@
 import * as React from 'react';
-
-import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'react-native-screen-idle-timer';
+import { StyleSheet, View, Button } from 'react-native';
+import ScreenIdleTimer from 'react-native-screen-idle-timer';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
-
-  React.useEffect(() => {
-    multiply(3, 7).then(setResult);
-  }, []);
+  const [activated, setActivated] = React.useState<boolean | undefined>(false);
 
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <Button
+        title={activated ? 'Deactivate' : 'Activate'}
+        onPress={() => {
+          if (activated) {
+            ScreenIdleTimer.deactivate();
+            setActivated(false);
+          } else {
+            ScreenIdleTimer.activate();
+            setActivated(true);
+          }
+        }}
+      />
     </View>
   );
 }
@@ -22,10 +28,5 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
   },
 });

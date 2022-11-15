@@ -1,5 +1,8 @@
 package com.screenidletimer;
 
+import android.app.Activity;
+import android.view.WindowManager;
+
 import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.Promise;
@@ -22,11 +25,31 @@ public class ScreenIdleTimerModule extends ReactContextBaseJavaModule {
     return NAME;
   }
 
-
-  // Example method
-  // See https://reactnative.dev/docs/native-modules-android
   @ReactMethod
-  public void multiply(double a, double b, Promise promise) {
-    promise.resolve(a * b);
+  public void activate() {
+    final Activity activity = getCurrentActivity();
+
+    if(activity != null){
+      activity.runOnUiThread(new Runnable() {
+        @Override
+        public void run() {
+          activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
+      });
+    }
+  }
+
+  @ReactMethod
+  public void deactivate() {
+    final Activity activity = getCurrentActivity();
+
+    if(activity != null){
+      activity.runOnUiThread(new Runnable() {
+        @Override
+        public void run() {
+          activity.getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
+      });
+    }
   }
 }

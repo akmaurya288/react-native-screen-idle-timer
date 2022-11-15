@@ -1,3 +1,4 @@
+import { Component, ReactNode } from 'react';
 import { NativeModules, Platform } from 'react-native';
 
 const LINKING_ERROR =
@@ -6,7 +7,7 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
-const ScreenIdleTimer = NativeModules.ScreenIdleTimer
+const ScreenIdleTimerPackage = NativeModules.ScreenIdleTimer
   ? NativeModules.ScreenIdleTimer
   : new Proxy(
       {},
@@ -17,6 +18,30 @@ const ScreenIdleTimer = NativeModules.ScreenIdleTimer
       }
     );
 
-export function multiply(a: number, b: number): Promise<number> {
-  return ScreenIdleTimer.multiply(a, b);
+let mounted = 0;
+
+export default class ScreenIdleTimer extends Component<{}> {
+  static activate() {
+    ScreenIdleTimerPackage.activate();
+  }
+
+  static deactivate() {
+    ScreenIdleTimerPackage.deactivate();
+  }
+
+  componentDidMount() {
+    mounted++;
+    ScreenIdleTimer.activate();
+  }
+
+  componentWillUnmount() {
+    mounted--;
+    if (!mounted) {
+      ScreenIdleTimer.deactivate();
+    }
+  }
+
+  render(): ReactNode {
+    return null;
+  }
 }
