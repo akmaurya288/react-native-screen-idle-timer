@@ -1,6 +1,6 @@
 # react-native-screen-idle-timer
 
-Prevent screen fron going to sleep on both iOS and Android.
+Prevent screen from going to sleep on both iOS and Android.
 
 ## Installation
 
